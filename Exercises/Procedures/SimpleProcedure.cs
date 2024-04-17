@@ -24,8 +24,18 @@ namespace Engine.Procedures
         {
             public ProcedureStatus Execute(SimpleProcedure procedure)
             {
-               procedure.CurrentState = new Success();
-               return procedure._successfulTask.Execute();  
+               switch(procedure._successfulTask.Execute())
+                {
+                    case ProcedureStatus.SUCCESS: 
+                        procedure.CurrentState = new Success();
+                        return ProcedureStatus.SUCCESS;
+                    case ProcedureStatus.FAILURE:
+                        procedure.CurrentState = new Failed();
+                        return ProcedureStatus.FAILURE;
+                    case ProcedureStatus.SUSPEND:
+                        throw new NotImplementedException();
+                    default: throw new NotImplementedException();
+                }  
             }
         }
 
@@ -34,6 +44,13 @@ namespace Engine.Procedures
             public ProcedureStatus Execute(SimpleProcedure procedure)
             {
                 return ProcedureStatus.SUCCESS;
+            }
+        }
+        private class Failed : State
+        {
+            public ProcedureStatus Execute(SimpleProcedure procedure)
+            {
+                throw new InvalidOperationException("Procedure has already failed");
             }
         }
     }

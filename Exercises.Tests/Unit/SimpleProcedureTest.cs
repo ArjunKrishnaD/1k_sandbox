@@ -24,9 +24,11 @@ namespace Engine.Tests.Unit
         public void Failure()
         {
             var task = new TestTask( ProcedureStatus.FAILURE);
-            Assert.Equal(ProcedureStatus.FAILURE, new SimpleProcedure(task).Execute());
+            SimpleProcedure procedure = new SimpleProcedure(task);
+            Assert.Equal(ProcedureStatus.FAILURE, procedure.Execute());
             Assert.Equal(0, task.ExecutedCount);
             Assert.Equal(1, task.FailedCount);
+            Assert.Throws<InvalidOperationException>(() => procedure.Execute());
         }
 
         internal class TestTask : ProcedureTask
