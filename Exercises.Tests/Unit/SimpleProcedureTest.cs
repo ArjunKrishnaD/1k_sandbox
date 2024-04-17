@@ -11,9 +11,13 @@ namespace Engine.Tests.Unit
         public void Success()
         {
             var task = new TestTask(ProcedureStatus.SUCCESS);
-            Assert.Equal(ProcedureStatus.SUCCESS, new SimpleProcedure(task).Execute());
-            Assert.True(task.Executed);
-            Assert.False(task.Failed);
+            SimpleProcedure procedure = new SimpleProcedure(task);
+            Assert.Equal(ProcedureStatus.SUCCESS, procedure.Execute());
+            Assert.Equal(1,task.ExecutedCount);
+            Assert.Equal(0,task.FailedCount);
+            Assert.Equal(ProcedureStatus.SUCCESS,procedure.Execute());
+            Assert.Equal(1, task.ExecutedCount);
+            Assert.Equal(0, task.FailedCount);
         }
 
         [Fact]
@@ -21,15 +25,15 @@ namespace Engine.Tests.Unit
         {
             var task = new TestTask( ProcedureStatus.FAILURE);
             Assert.Equal(ProcedureStatus.FAILURE, new SimpleProcedure(task).Execute());
-            Assert.False(task.Executed);
-            Assert.True(task.Failed);
+            Assert.Equal(0, task.ExecutedCount);
+            Assert.Equal(1, task.FailedCount);
         }
 
         internal class TestTask : ProcedureTask
         {
             private readonly ProcedureStatus _status;
-            internal bool Executed = false;
-            internal bool Failed = false;
+            internal int ExecutedCount = 0;
+            internal int FailedCount = 0;
 
             internal TestTask(ProcedureStatus status)
             {
@@ -41,10 +45,10 @@ namespace Engine.Tests.Unit
                 switch (_status)
                 {
                     case ProcedureStatus.SUCCESS:
-                        Executed = true;
+                        ExecutedCount+=1;
                         break;
                     case ProcedureStatus.FAILURE:
-                        Failed = true;
+                        FailedCount+=1;
                         break;
                     case ProcedureStatus.SUSPEND:
                         throw new NotImplementedException();
