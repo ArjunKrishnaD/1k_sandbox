@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Sdk;
 
 namespace Engine.Tests.Unit
 {
@@ -13,19 +14,26 @@ namespace Engine.Tests.Unit
         [Fact]
         public void Success()
         {
-            Assert.Equal(ProcedureStatus.SUCCESS, new SimpleProcedure(new TestTask(ProcedureStatus.SUCCESS)).Execute());
+            var task = new TestTask(ProcedureStatus.SUCCESS);
+            Assert.Equal(ProcedureStatus.SUCCESS, new SimpleProcedure(task).Execute());
+            Assert.True(task.Executed);
+            Assert.False(task.Failed);
         }
 
         [Fact]
         public void Failure()
         {
-            Assert.Equal(ProcedureStatus.FAILURE, new SimpleProcedure(new TestTask( ProcedureStatus.FAILURE)).Execute());
+            var task = new TestTask( ProcedureStatus.FAILURE);
+            Assert.Equal(ProcedureStatus.FAILURE, new SimpleProcedure(task).Execute());
+            Assert.False(task.Executed);
+            Assert.True(task.Failed);
         }
 
         internal class TestTask : ProcedureTask
         {
             private readonly ProcedureStatus _status;
-
+            internal bool Executed = false;
+            internal bool Failed = false;
             internal TestTask(ProcedureStatus status)
             {
                 _status = status;
@@ -33,6 +41,8 @@ namespace Engine.Tests.Unit
 
             public ProcedureStatus Execute()
             {
+                if (_status == ProcedureStatus.SUCCESS) Executed = true;
+                if (_status == ProcedureStatus.FAILURE) Failed = true;
                 return _status;
             }
 
