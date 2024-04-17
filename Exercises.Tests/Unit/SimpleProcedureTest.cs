@@ -31,11 +31,28 @@ namespace Engine.Tests.Unit
             Assert.Throws<InvalidOperationException>(() => procedure.Execute());
         }
 
+        [Fact]
+        public void Suspension()
+        {
+            var task = new TestTask(ProcedureStatus.SUSPEND);
+            SimpleProcedure procedure = new SimpleProcedure(task);
+            Assert.Equal(ProcedureStatus.SUSPEND, procedure.Execute());
+            Assert.Equal(0, task.ExecutedCount);
+            Assert.Equal(0, task.FailedCount);
+            Assert.Equal(1, task.SuspendCount);
+            Assert.Equal(ProcedureStatus.SUSPEND, procedure.Execute());
+            Assert.Equal(0, task.ExecutedCount);
+            Assert.Equal(0, task.FailedCount);
+            Assert.Equal(2, task.SuspendCount);
+        }
+
         internal class TestTask : ProcedureTask
         {
             private readonly ProcedureStatus _status;
             internal int ExecutedCount = 0;
             internal int FailedCount = 0;
+            internal int SuspendCount = 0;
+            
 
             internal TestTask(ProcedureStatus status)
             {
@@ -53,7 +70,8 @@ namespace Engine.Tests.Unit
                         FailedCount+=1;
                         break;
                     case ProcedureStatus.SUSPEND:
-                        throw new NotImplementedException();
+                        SuspendCount+=1;
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

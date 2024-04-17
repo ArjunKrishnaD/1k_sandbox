@@ -4,7 +4,7 @@ namespace Engine.Procedures
     public class SimpleProcedure
     {
         private readonly ProcedureTask _successfulTask;
-        private State CurrentState = new Initial();  
+        private State CurrentState = new Ready();  
         public SimpleProcedure(ProcedureTask procedureTask)
         {
             _successfulTask = procedureTask;
@@ -20,26 +20,26 @@ namespace Engine.Procedures
            
         }
         
-        private class Initial : State
+        private class Ready : State
         {
             public ProcedureStatus Execute(SimpleProcedure procedure)
             {
                switch(procedure._successfulTask.Execute())
                 {
                     case ProcedureStatus.SUCCESS: 
-                        procedure.CurrentState = new Success();
+                        procedure.CurrentState = new Succeeded();
                         return ProcedureStatus.SUCCESS;
                     case ProcedureStatus.FAILURE:
                         procedure.CurrentState = new Failed();
                         return ProcedureStatus.FAILURE;
                     case ProcedureStatus.SUSPEND:
-                        throw new NotImplementedException();
+                        return ProcedureStatus.SUSPEND;
                     default: throw new NotImplementedException();
                 }  
             }
         }
 
-        private class Success : State
+        private class Succeeded : State
         {
             public ProcedureStatus Execute(SimpleProcedure procedure)
             {
