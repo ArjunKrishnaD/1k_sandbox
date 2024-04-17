@@ -1,11 +1,7 @@
-﻿using Engine.Procedures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Engine.Procedures;
 using Xunit;
-using Xunit.Sdk;
+// ReSharper disable RedundantDefaultMemberInitializer
 
 namespace Engine.Tests.Unit
 {
@@ -34,6 +30,7 @@ namespace Engine.Tests.Unit
             private readonly ProcedureStatus _status;
             internal bool Executed = false;
             internal bool Failed = false;
+
             internal TestTask(ProcedureStatus status)
             {
                 _status = status;
@@ -41,8 +38,20 @@ namespace Engine.Tests.Unit
 
             public ProcedureStatus Execute()
             {
-                if (_status == ProcedureStatus.SUCCESS) Executed = true;
-                if (_status == ProcedureStatus.FAILURE) Failed = true;
+                switch (_status)
+                {
+                    case ProcedureStatus.SUCCESS:
+                        Executed = true;
+                        break;
+                    case ProcedureStatus.FAILURE:
+                        Failed = true;
+                        break;
+                    case ProcedureStatus.SUSPEND:
+                        throw new NotImplementedException();
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
                 return _status;
             }
 
