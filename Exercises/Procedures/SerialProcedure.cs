@@ -17,11 +17,27 @@ namespace Engine.Procedures
 
         public ProcedureStatus Execute()
         {
-            foreach (Procedure procedure in procedures)
+            switch (procedures.First().Execute())
             {
-                procedure.Execute();
+                case ProcedureStatus.FAILURE: 
+                    return ProcedureStatus.FAILURE;
+                case ProcedureStatus.SUSPEND:
+                    return ProcedureStatus.SUSPEND;
+                case ProcedureStatus.SUCCESS:
+                    if (procedures.Count() == 1)
+                        return ProcedureStatus.SUCCESS;
+                    switch( new SerialProcedure(procedures.Skip(1).ToList()).Execute())
+                    {
+                        case ProcedureStatus.SUCCESS:
+                            return ProcedureStatus.SUCCESS;
+                        case ProcedureStatus.FAILURE:
+                            return ProcedureStatus.FAILURE;
+                        case ProcedureStatus.SUSPEND:
+                            return ProcedureStatus.SUSPEND;
+                        default: throw new NotImplementedException();
+                    }
+                default: throw new NotImplementedException();
             }
-            return ProcedureStatus.SUCCESS;
         }
     }
 }
