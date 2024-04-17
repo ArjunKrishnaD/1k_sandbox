@@ -1,11 +1,11 @@
 ﻿
 namespace Engine.Procedures
 {
-    public class SimpleProcedure
+    public class SimpleProcedure:Procedure
     {
         private readonly ProcedureTask _successfulTask;
         private State CurrentState = new Ready();  
-        public SimpleProcedure(ProcedureTask procedureTask)
+        public SimpleProcedure(ProcedureTask procedureTask) 
         {
             _successfulTask = procedureTask;
         }

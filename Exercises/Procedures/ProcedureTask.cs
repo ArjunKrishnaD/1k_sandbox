@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Engine.Procedures
 {
+    public interface Procedure
+    {
+        ProcedureStatus Execute();
+    }
+
     public interface ProcedureTask
     {
         ProcedureStatus Execute();
