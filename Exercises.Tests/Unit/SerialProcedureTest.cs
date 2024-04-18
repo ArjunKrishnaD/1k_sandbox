@@ -29,6 +29,24 @@ namespace Engine.Tests.Unit
                 new SimpleProcedure(new TestTask(ProcedureStatus.FAILURE)),
             });
             Assert.Equal(ProcedureStatus.FAILURE, procedure.Execute(log));
+            Assert.Equal(1, log.SuccessCount());
+            Assert.Equal(1, log.FailureCount());
+
+        }
+        [Fact]
+        public void SecondProcedureSuspends()
+        {
+            var log = new ProcedureLog();
+            SerialProcedure procedure = new SerialProcedure(new List<Procedure>()
+            {
+                new SimpleProcedure(new TestTask(ProcedureStatus.SUCCESS)),
+                new SimpleProcedure(new TestTask(ProcedureStatus.SUSPEND)),
+            });
+            Assert.Equal(ProcedureStatus.SUSPEND, procedure.Execute(log));
+            Assert.Equal(1, log.SuccessCount());
+            Assert.Equal(0, log.FailureCount());
+            Assert.Equal(1, log.SuspendCount());
+
         }
     }
 }

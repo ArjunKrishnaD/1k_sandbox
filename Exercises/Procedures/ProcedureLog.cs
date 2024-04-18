@@ -10,10 +10,12 @@ namespace Engine.Procedures
     {
         private readonly IndexId _index = new IndexId();
         private readonly Dictionary<string, ProcedureStatus> _statuses = new Dictionary<string, ProcedureStatus>();
-        public int SuccessCount()
-        {
-            return _statuses.Where(x => x.Value == ProcedureStatus.SUCCESS).Count();
-        }
+
+        public int FailureCount() => StatusCount(ProcedureStatus.FAILURE);
+
+        public int SuccessCount() => StatusCount(ProcedureStatus.SUCCESS);
+        public int SuspendCount() => StatusCount(ProcedureStatus.SUSPEND);
+        private int StatusCount(ProcedureStatus status) => _statuses.Where(x => x.Value == status).Count();
 
         internal void Record(ProcedureStatus result)
         {
