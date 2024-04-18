@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Engine.Tests.Unit
 {
-    public class MultipleProcudureTest
+    public class ComplexProcedureTest
     {
         [Fact]
         public void Success()
@@ -13,11 +13,16 @@ namespace Engine.Tests.Unit
             SerialProcedure procedure = new SerialProcedure(new List<Procedure>()
                 {
                     new SimpleProcedure(new TestTask(ProcedureStatus.SUCCESS)),
-                    new MultipleProcedures(new List<ProcedureStatus>{ProcedureStatus.SUCCESS, ProcedureStatus.SUCCESS, ProcedureStatus.SUCCESS}),
+                    new SerialProcedure(new List<Procedure>{ 
+                        new SimpleProcedure(new TestTask(ProcedureStatus.SUCCESS)),
+                        new SimpleProcedure(new TestTask(ProcedureStatus.FAILURE)),
+                        new SimpleProcedure(new TestTask(ProcedureStatus.SUCCESS))
+                    }),
                     new SimpleProcedure(new TestTask(ProcedureStatus.SUCCESS)),
                 });
-            Assert.Equal(ProcedureStatus.SUCCESS, procedure.Execute(log));
-            Assert.Equal(5, log.SuccessCount());
+            Assert.Equal(ProcedureStatus.FAILURE, procedure.Execute(log));
+            Assert.Equal(2, log.SuccessCount());
+
         }
     }
 }

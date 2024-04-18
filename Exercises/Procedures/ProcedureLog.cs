@@ -22,10 +22,6 @@ namespace Engine.Procedures
             _index.Next();
             _statuses.Add(new KeyValuePair<string, ProcedureStatus>(_index.Value().ToString(), result));
         }
-        internal void RecordNested(ProcedureStatus resultNested)
-        {
-            _index.Down();
-            _statuses[_index.Value()] = resultNested;
-        }
+
     }
 }
