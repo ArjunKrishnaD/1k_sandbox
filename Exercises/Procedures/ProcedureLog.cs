@@ -20,5 +20,10 @@ namespace Engine.Procedures
             _index.Next();
             _statuses[_index.Value()] = result;
         }
+        internal void RecordNested(ProcedureStatus resultNested)
+        {
+            _index.Down();
+            _statuses[_index.Value()] = resultNested;
+        }
     }
 }
