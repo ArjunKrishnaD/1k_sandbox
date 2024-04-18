@@ -5,17 +5,27 @@ namespace Engine.Procedures
     {
         private readonly ProcedureTask _successfulTask;
         private State CurrentState = new Ready();  
-        public SimpleProcedure(ProcedureTask procedureTask) 
+        public SimpleProcedure(ProcedureTask procedureTask,ProcedureTask undoTask) 
         {
             _successfulTask = procedureTask;
         }
 
+        public SimpleProcedure(ProcedureTask procedureTask):this(procedureTask,EmptyTask.Instance)
+        {
+           
+        }
         public ProcedureStatus Execute(ProcedureLog log)
         {
             ProcedureStatus result = CurrentState.Execute(this);
             log.Record(result);
             return result;
         }
+
+        public ProcedureStatus Undo(ProcedureLog log)
+        {
+            throw new NotImplementedException();
+        }
+
         private interface State
         {
             public ProcedureStatus Execute(SimpleProcedure procedure);

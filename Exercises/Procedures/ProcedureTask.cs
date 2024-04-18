@@ -9,6 +9,7 @@ namespace Engine.Procedures
     public interface Procedure
     {
         ProcedureStatus Execute(ProcedureLog log);
+        ProcedureStatus Undo(ProcedureLog log);
     }
 
     public interface ProcedureTask
@@ -21,5 +22,14 @@ namespace Engine.Procedures
         SUCCESS,
         FAILURE,
         SUSPEND
+    }
+    public class EmptyTask : ProcedureTask
+    {
+        private EmptyTask() { }
+        public static EmptyTask Instance = new EmptyTask();
+        public ProcedureStatus Execute()
+        {
+            return ProcedureStatus.SUCCESS;
+        }
     }
 }
