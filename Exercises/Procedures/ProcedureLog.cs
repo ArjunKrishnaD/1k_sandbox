@@ -9,7 +9,7 @@ namespace Engine.Procedures
     public class ProcedureLog
     {
         private readonly IndexId _index = new IndexId();
-        private readonly Dictionary<string, ProcedureStatus> _statuses = new Dictionary<string, ProcedureStatus>();
+        private readonly List<KeyValuePair<string,ProcedureStatus>> _statuses = new List<KeyValuePair<string, ProcedureStatus>>();
 
         public int FailureCount() => StatusCount(ProcedureStatus.FAILURE);
 
@@ -20,7 +20,7 @@ namespace Engine.Procedures
         internal void Record(ProcedureStatus result)
         {
             _index.Next();
-            _statuses[_index.Value()] = result;
+            _statuses.Add(new KeyValuePair<string, ProcedureStatus>(_index.Value().ToString(), result));
         }
     }
 }

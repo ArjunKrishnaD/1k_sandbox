@@ -39,5 +39,10 @@ namespace Engine.Procedures
                 default: throw new NotImplementedException();
             }
         }
+
+        public ProcedureStatus Undo(ProcedureLog log)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
