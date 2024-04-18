@@ -14,8 +14,14 @@ namespace Engine.Procedures
         {
             this.procedures = procedures;
         }
-
         public ProcedureStatus Execute(ProcedureLog log)
+        {
+            log.Down();
+            var result = RecursiveExecute(log);
+            log.Up();
+            return result;
+        }
+        private ProcedureStatus RecursiveExecute(ProcedureLog log)
         {
             switch (procedures.First().Execute(log))
             {
@@ -26,7 +32,7 @@ namespace Engine.Procedures
                 case ProcedureStatus.SUCCESS:
                     if (procedures.Count() == 1)
                         return ProcedureStatus.SUCCESS;
-                    switch( new SerialProcedure(procedures.Skip(1).ToList()).Execute(log))
+                    switch( new SerialProcedure(procedures.Skip(1).ToList()).RecursiveExecute(log))
                     {
                         case ProcedureStatus.SUCCESS:
                             return ProcedureStatus.SUCCESS;

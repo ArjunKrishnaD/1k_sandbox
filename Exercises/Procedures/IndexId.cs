@@ -8,15 +8,16 @@ namespace Engine.Procedures
 {
     public class IndexId
     {
-        private readonly List<int> ids = new List<int> {0};
+        private readonly List<int> ids = new List<int> {};
         public IndexId Next()
         {
+            if (ids.Count == 0) return this;
             ids[ids.Count - 1]= ids[ids.Count - 1] + 1;
             return this;
         }
         public IndexId Down()
         {
-            ids.Add(1);
+            ids.Add(0);
             return this;
         }
         public IndexId Up()

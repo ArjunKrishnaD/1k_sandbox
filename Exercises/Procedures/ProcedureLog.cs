@@ -22,6 +22,15 @@ namespace Engine.Procedures
             _index.Next();
             _statuses.Add(new KeyValuePair<string, ProcedureStatus>(_index.Value().ToString(), result));
         }
+        public void Down()
+        {
+            _index.Next().Down();
+            
+        }
+        public void Up()
+        {
+            _index.Up();
 
+        }
     }
 }

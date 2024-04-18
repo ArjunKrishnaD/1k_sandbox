@@ -11,8 +11,8 @@ namespace Engine.Tests.Unit
         {
             Assert.Equal("1", new IndexId().Next().Value());
             Assert.Equal("2", new IndexId().Next().Next().Value());
-            Assert.Equal("1.1", new IndexId().Next().Down().Value());
-            Assert.Equal("1.2", new IndexId().Next().Down().Next().Value());
+            Assert.Equal("1.1", new IndexId().Next().Down().Next().Value());
+            Assert.Equal("1.2", new IndexId().Next().Down().Next().Next().Value());
             Assert.Equal("1", new IndexId().Next().Down().Next().Up().Value());
         }
     }
