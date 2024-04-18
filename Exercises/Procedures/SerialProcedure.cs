@@ -15,9 +15,9 @@ namespace Engine.Procedures
             this.procedures = procedures;
         }
 
-        public ProcedureStatus Execute()
+        public ProcedureStatus Execute(ProcedureLog log)
         {
-            switch (procedures.First().Execute())
+            switch (procedures.First().Execute(log))
             {
                 case ProcedureStatus.FAILURE: 
                     return ProcedureStatus.FAILURE;
@@ -26,7 +26,7 @@ namespace Engine.Procedures
                 case ProcedureStatus.SUCCESS:
                     if (procedures.Count() == 1)
                         return ProcedureStatus.SUCCESS;
-                    switch( new SerialProcedure(procedures.Skip(1).ToList()).Execute())
+                    switch( new SerialProcedure(procedures.Skip(1).ToList()).Execute(log))
                     {
                         case ProcedureStatus.SUCCESS:
                             return ProcedureStatus.SUCCESS;

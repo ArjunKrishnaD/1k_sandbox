@@ -8,7 +8,7 @@ namespace Engine.Procedures
 {
     public interface Procedure
     {
-        ProcedureStatus Execute();
+        ProcedureStatus Execute(ProcedureLog log);
     }
 
     public interface ProcedureTask

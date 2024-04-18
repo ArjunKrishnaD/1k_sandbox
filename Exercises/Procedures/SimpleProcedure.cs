@@ -10,9 +10,11 @@ namespace Engine.Procedures
             _successfulTask = procedureTask;
         }
 
-        public ProcedureStatus Execute()
+        public ProcedureStatus Execute(ProcedureLog log)
         {
-            return CurrentState.Execute(this);
+            ProcedureStatus result = CurrentState.Execute(this);
+            log.Record(result);
+            return result;
         }
         private interface State
         {
